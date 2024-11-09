@@ -1,112 +1,67 @@
 package FoodOrderingSystem;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FoodOrderingSystem extends JFrame {
-    // Declare components
-    private JCheckBox cPizza, cBurger, cFries, cSoftDrinks, cTea, cSundae;
-    private JRadioButton radioButton1;
-    private JRadioButton rb5, rb10, rb15, rbNone;
-    private ButtonGroup discountGroup;
+public class FoodOrderingSystem extends JFrame{
+    private JPanel FoodOrderingSystem;
+    private JCheckBox cPizza;
+    private JCheckBox cBurger;
+    private JCheckBox cFries;
+    private JCheckBox cSoftDrinks;
+    private JCheckBox cTea;
+    private JCheckBox cSundae;
+    private JRadioButton rbNone;
     private JButton btnOrder;
+    private JRadioButton rb5;
+    private JRadioButton rb10;
+    private JRadioButton rb15;
 
-    // Prices for each food item
-    private static final double PIZZA_PRICE = 100.0;
-    private static final double BURGER_PRICE = 80.0;
-    private static final double FRIES_PRICE = 65.0;
-    private static final double SOFT_DRINKS_PRICE = 55.0;
-    private static final double TEA_PRICE = 50.0;
-    private static final double SUNDAE_PRICE = 40.0;
+    public FoodOrderingSystem(){
 
-    public FoodOrderingSystem() {
-        // Set up the frame
-        setTitle("Food Ordering System");
-        setSize(400, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new FlowLayout());
+        int pPizza = 100;
+        int pBurger = 80;
+        int pFries = 65;
+        int pSoftDrinks = 55;
+        int pTea = 50;
+        int pSundae = 40;
 
-        // Initialize checkboxes for food items
-        cPizza = new JCheckBox("Pizza - Php 100");
-        cBurger = new JCheckBox("Burger - Php 80");
-        cFries = new JCheckBox("Fries - Php 65");
-        cSoftDrinks = new JCheckBox("Soft drinks - Php 55");
-        cTea = new JCheckBox("Tea - Php 50");
-        cSundae = new JCheckBox("Sundae - Php 40");
-
-        // Initialize radio buttons for discounts
-        rb5 = new JRadioButton("5% off");
-        rb10 = new JRadioButton("10% off");
-        rb15 = new JRadioButton("15% off");
-        rbNone = new JRadioButton("No discount", true); // Default is no discount
-
-        // Group the radio buttons together to allow only one selection at a time
-        discountGroup = new ButtonGroup();
-        discountGroup.add(rb5);
-        discountGroup.add(rb10);
-        discountGroup.add(rb15);
-        discountGroup.add(rbNone);
-
-        // Initialize the order button
-        btnOrder = new JButton("Order");
-
-        // Add components to the frame
-        add(cPizza);
-        add(cBurger);
-        add(cFries);
-        add(cSoftDrinks);
-        add(cTea);
-        add(cSundae);
-        add(rb5);
-        add(rb10);
-        add(rb15);
-        add(rbNone);
-        add(btnOrder);
-
-        // Action listener for the order button
-        btnOrder.addActionListener(new ActionListener() {
-            @Override
+        btnOrder.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                calculateTotalPrice();
+                double totalPrice = 0;
+
+                if (cPizza.isSelected()) totalPrice += pPizza;
+                if (cBurger.isSelected()) totalPrice += pBurger;
+                if (cFries.isSelected()) totalPrice += pFries;
+                if (cSoftDrinks.isSelected()) totalPrice += pSoftDrinks;
+                if (cTea.isSelected()) totalPrice += pTea;
+                if (cSundae.isSelected()) totalPrice += pSundae;
+
+                double discount = 0;
+
+                if (rb5.isSelected()) {
+                    discount = 0.05;
+                } else if (rb10.isSelected()) {
+                    discount = 0.10;
+                } else if (rb15.isSelected()) {
+                    discount = 0.15;
+                }
+
+                double discountAmount = totalPrice * discount;
+                double finalPrice = totalPrice - discountAmount;
+
+                JOptionPane.showMessageDialog(null, "The total price is Php" + (String.format(" %.2f", finalPrice)), "Message", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
 
-    private void calculateTotalPrice() {
-        double totalPrice = 0.0;
-
-        // Add the price of each selected food item
-        if (cPizza.isSelected()) totalPrice += PIZZA_PRICE;
-        if (cBurger.isSelected()) totalPrice += BURGER_PRICE;
-        if (cFries.isSelected()) totalPrice += FRIES_PRICE;
-        if (cSoftDrinks.isSelected()) totalPrice += SOFT_DRINKS_PRICE;
-        if (cTea.isSelected()) totalPrice += TEA_PRICE;
-        if (cSundae.isSelected()) totalPrice += SUNDAE_PRICE;
-
-        // Get the selected discount
-        double discountPercentage = 0.0;
-        if (rb5.isSelected()) discountPercentage = 5.0;
-        else if (rb10.isSelected()) discountPercentage = 10.0;
-        else if (rb15.isSelected()) discountPercentage = 15.0;
-
-        // Apply the discount
-        double discountAmount = totalPrice * discountPercentage / 100;
-        totalPrice -= discountAmount;
-
-        // Format the total price to 2 decimal places
-        String totalPriceFormatted = String.format("The total price is Php %.2f", totalPrice);
-
-        // Show the total price in a message dialog
-        JOptionPane.showMessageDialog(this, totalPriceFormatted);
-    }
-
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // Create an instance of the FoodOrderingSystem class and make it visible
-            FoodOrderingSystem orderingSystem = new FoodOrderingSystem();
-            orderingSystem.setVisible(true);
-        });
+        FoodOrderingSystem app = new FoodOrderingSystem();
+        app.setTitle("Food Ordering System");
+        app.setContentPane(app.FoodOrderingSystem);
+        app.setSize(400,300);
+        app.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        app.setVisible(true);
     }
 }
